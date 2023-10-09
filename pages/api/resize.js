@@ -16,6 +16,7 @@ export default async function handler(req, res) {
       buffer = Buffer.from(response.data, "binary");
     } else {
       for (const host of hosts) {
+        console.log(host);
         const fullUrl = url.resolve(host, imageUrl);
         console.log("Trying ", fullUrl);
         const response = await axios
