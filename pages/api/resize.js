@@ -17,6 +17,7 @@ export default async function handler(req, res) {
     } else {
       for (const host of hosts) {
         const fullUrl = url.resolve(host, imageUrl);
+        console.log("Trying ", fullUrl);
         const response = await axios
           .get(fullUrl, { responseType: "arraybuffer" })
           .catch(() => null);
