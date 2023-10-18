@@ -34,12 +34,18 @@ export default async function handler(req, res) {
       return;
     }
 
-    const resizedBuffer = await sharp(buffer)
-      .resize(parseInt(width))
-      .jpeg({ quality: parseInt(quality) })
-      .toBuffer();
+    const format = imageUrl.split(".").pop();
+    let image = sharp(buffer).resize(parseInt(width));
 
-    res.setHeader("Content-Type", "image/jpeg");
+    if (format === "jpeg" || format === "webp") {
+      image = image.toFormat(format, { quality: parseInt(quality) });
+    } else {
+      image = image.toFormat(format);
+    }
+
+    const resizedBuffer = await image.toBuffer();
+
+    res.setHeader("Content-Type", `image/${format}`);
     res.status(200).end(resizedBuffer);
   } catch (error) {
     res.status(500).json({ error: "Error resizing the image" });
